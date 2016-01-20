@@ -10,6 +10,7 @@ var newMoveX = ref.child('newMoveX');
 var newMoveO = ref.child('newMoveO');  
 var newMove;  
 var count = 0;
+var cnt = 0;
 
 var g_start; 
 
@@ -127,6 +128,7 @@ function turnHandler(event){
                 $('.turn').text("O's turn ... wait for other player to move.");
             x = false;
         }
+        
     }
 
     else{
@@ -137,111 +139,24 @@ function turnHandler(event){
                 $('.turn').text("X's turn ... wait for other player to move.");
             x = true;
         }
+        
     }
     winner();
 }
 
-function winner()
-{
-    squares = squareMatrix();
-
-    if (rowWin(squares) === 3 ||colWin(squares) === 3 ||diagWin(squares) === 3)
-    {
-        if (g_start) alert("X Wins !!! ");
-        g_start = false;
-    } else if (rowWin(squares) === -3 ||colWin(squares) === -3 ||diagWin(squares) === -3)
-    {
-        if (g_start) alert("O Wins !!! ");
-        g_start = false;       
-    }
-
-    if (fullTie(squares))
-    {
-        if (g_start) alert("Tie game!!!");
-        g_start = false;
-    }
-};
-
-function squareMatrix() {
-
-    squares = [];  
-
-    $(".row").each(function()
-    {
-        row = [];   
-        $(this).children(".box").each(function()
-        {
-            val = 0;
-            if ($(this).text() === 'X') val = 1;
-            if ($(this).text() === 'O') val = -1;
-            row.push(val);
-        })
-        squares.push(row);  
-    })
-
-    return squares;  
+function winner(){
+    cnt++;
+    if      ($('#square1').text() === $('#square2').text() && $('#square2').text() !== '' && $('#square2').text() === $('#square3').text()) {alert($('#square1').text() + " Are A Winner !!! ")}
+    else if ($('#square1').text() === $('#square4').text() && $('#square4').text() !== '' && $('#square4').text() === $('#square7').text()) {alert($('#square4').text() + " Are A Winner !!! ")}
+    else if ($('#square1').text() === $('#square5').text() && $('#square5').text() !== '' && $('#square5').text() === $('#square9').text()) {alert($('#square5').text() + " Are A Winner !!! ")}
+    else if ($('#square4').text() === $('#square5').text() && $('#square5').text() !== '' && $('#square5').text() === $('#square6').text()) {alert($('#square5').text() + " Are A Winner !!! ")}
+    else if ($('#square7').text() === $('#square8').text() && $('#square8').text() !== '' && $('#square8').text() === $('#square9').text()) {alert($('#square9').text() + " Are A Winner !!! ")}
+    else if ($('#square2').text() === $('#square5').text() && $('#square5').text() !== '' && $('#square5').text() === $('#square8').text()) {alert($('#square8').text() + " Are A Winner !!! ")}
+    else if ($('#square3').text() === $('#square6').text() && $('#square6').text() !== '' && $('#square6').text() === $('#square9').text()) {alert($('#square8').text() + " Are A Winner !!! ")}
+    else if ($('#square3').text() === $('#square5').text() && $('#square5').text() !== '' && $('#square5').text() === $('#square7').text()) {alert($('#square7').text() + " Are A Winner !!! ")}
+    else if (cnt >=9){alert(" Game Is A Tie!!!")}
 }
 
-function rowWin(squares)
-{
-
-    for (i = 0; i < 3; ++i) {
-        sum = 0;
-
-        for (j = 0; j < 3; ++j)
-            sum += squares[i][j];
-        if (Math.abs(sum) === 3)
-            return sum;
-    }
-
-
-    return 0;
-}
-
-
-function fullTie(squares)
-{
-    for (i = 0; i < 3; ++i) {
-
-        for (j = 0; j < 3; ++j)
-          if (squares[i][j] == 0)
-            return false;
-    }
-
-
-    return true;
-}
-
-function colWin(squares)
-{
-    for (i = 0; i < 3; ++i) {
-        sum = 0;
-        for (j = 0; j < 3; ++j)
-            sum += squares[j][i];
-        if (Math.abs(sum) === 3)
-            return sum;
-    }
-
-    return 0;
-}
-
-function diagWin(squares)
-{
-    sum = 0;
-    for (i = 0; i < 3; ++i) {
-        sum += squares[i][i];
-    }
-    if (Math.abs(sum) === 3)
-        return sum;
-    sum = 0;
-    for (i = 0; i < 3; ++i) {
-        sum += squares[2-i][i];
-    }
-    if (Math.abs(sum) === 3)
-        return sum;
-
-    return 0;
-}
 
 function handleRemoteTurn(snapshot)
 {
